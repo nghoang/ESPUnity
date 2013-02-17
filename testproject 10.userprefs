@@ -1,0 +1,17 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CustomScripts\Server.cs">
+    <Files>
+      <File FileName="Assets\Plugins\AstarPathfindingProject\Core\AstarPath.cs" Line="1" Column="1" />
+      <File FileName="Assets\CustomScripts\Server.cs" Line="216" Column="99" />
+      <File FileName="Assets\CustomScripts\ServerThread.cs" Line="23" Column="36" />
+      <File FileName="Assets\CustomScripts\AppConst.cs" Line="8" Column="36" />
+      <File FileName="Assets\CustomScripts\AutoTransparent.cs" Line="22" Column="10" />
+      <File FileName="Assets\CustomScripts\CustomSeeker.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

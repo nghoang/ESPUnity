@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\CustomScripts\Server.cs">
+    <Files>
+      <File FileName="Assets\Test.cs" Line="36" Column="21" />
+      <File FileName="Assets\CustomScripts\Server.cs" Line="226" Column="22" />
+      <File FileName="Assets\CustomScripts\CustomSeeker.cs" Line="310" Column="1" />
+      <File FileName="Assets\CustomScripts\ServerThread.cs" Line="13" Column="38" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

@@ -1,0 +1,44 @@
+C3 Lite Integration
+-------------------
+ 
+Adding Voice Chat to your game is simple:   
+The following process is recommended to integrate C3 with your Unity project:
+ 
+1) Select 'Vivox Assets/C3JoinVoice.cs' and drag and drop it into the main camera.
+2) Read the comments in C3JoinVoice.cs to learn about the various changable parameters.  Contact c3@vivox.com for your appID - we will respond within 24 hours.
+
+ 
+ 
+ 
+Player experience
+--------------------
+               
+Players can join a group voice channel by clicking on the C3 headset icon in the game.   
+All players that use the same channel identifier will join that same channel.   They do not need to know each other, search for a server or a channel - they will join a common channel with everyone else they are playing.
+ 
+To join the voice channel, a player needs to have C3.  C3 is a FREE TO USE game communications tool.  If a player does not currently
+have C3 installed, they will be provided a link to download it.  If a player has C3 installed, the voice channel will open automatically and they can begin speaking to the other players. 
+Your players will see the voice icon and one of three things will happen:
+ 
+1.  If they have C3 already downloaded and are logged in, C3 will
+    open and they will be placed in the voice channel.
+   
+2.  If they have C3 downloaded but they are not logged in, the
+    C3 login screen will appear.  After login, they will join
+    the channel.
+   
+3.  If they do not have C3, they will receive a small popup that
+    invites them to download C3 and join the channel.  Once they
+    download and open C3, the channel will be available to them.
+ 
+It is recommended that you do some sort of promotion or communication about the fact that players have the voice option.
+You can provide links to download C3 at www.downloadc3.com
+ 
+For questions or support - contact c3-issues@vivox.com
+ 
+What’s the catch?
+----------------------
+ 
+There is no catch – just easy to implement voice chat for your game.   At some point we may implement features, which we will charge for, but the basic service will always remain free, both to game publishers/developers and players.
+
+To see an example of a basic C3 integration go to http://social.c3p.vivox.com/WebPlayer.html  to try a working Unity Webplayer demonstration.
