@@ -10,7 +10,7 @@ public delegate void CallbackFunction();
 
 public class Server : MonoBehaviour , IServerThread{
 	
-	public float ObjectScale = 1;
+	public float ObjectScale = 2;
 	public Vector3 ObjectPos = new Vector3(0,0,0);
 	public GameObject mainObject = null;
     //private GameObject pfGo;
@@ -43,9 +43,10 @@ public class Server : MonoBehaviour , IServerThread{
 	public string pathMode = "single";
 	string cursorText = "";
 	Vector2 mousePos_2D;
+	public GameObject ground;
 	
 	//save to feed to later connections
-	string last__status_content = "";
+	//string last__status_content = "";
 	string last_modelUrl = "";
 
     public void SetSemanticInfo(string info)
@@ -89,12 +90,16 @@ public class Server : MonoBehaviour , IServerThread{
 		}
 		statuses = newSemantic;
 		
-		debug = "";
+		string semantic_info = "";
 		foreach (String i in statuses)
 		{
-			debug += i + "\n";
+			semantic_info += i + "\n";
 		}
-		Debug.Log(debug);
+		NameValueCollection pa = new NameValueCollection();
+        pa.Add("sid", host_id);
+        pa.Add("semantic", semantic_info);
+		wclient.UploadValues(AppConst.SERVER_DOMAIN + AppConst.SERVER_PATH + "?act=SetSemantic",pa);
+		//Debug.Log(debug);
 	}
 
     void Start()
@@ -154,8 +159,10 @@ public class Server : MonoBehaviour , IServerThread{
 			ReadStatus();
 		}
 		
+		
 		mainObject.transform.position = ObjectPos;
-
+		mainObject.transform.localScale = new Vector3(2,2,2);
+		
         Debug.Log("Setup PF...");
 		foreach (Transform o in mainObject.transform)
 		{
@@ -176,7 +183,7 @@ public class Server : MonoBehaviour , IServerThread{
 				status = status.Split(',')[0];
 			}
 			
-			Debug.Log("Item id: " + id + " at index " + index + " is " + status);
+			//Debug.Log("Item id: " + id + " at index " + index + " is " + status);
 			
 			if (status == "ground")
 			{
@@ -322,7 +329,7 @@ public class Server : MonoBehaviour , IServerThread{
 		if (mainObject != null)
 		{
 			Debug.Log ("Scale Objects...");
-			mainObject.transform.localScale = new Vector3(scale,scale,scale);
+			mainObject.transform.localScale = new Vector3(2,2,2);
 		}
 	}
 	
@@ -359,14 +366,15 @@ public class Server : MonoBehaviour , IServerThread{
         
         if (Network.peerType == NetworkPeerType.Server)
         {
-            ObjectScale = float.Parse(GUI.TextField(new Rect(80,10,30,20),ObjectScale.ToString()));
+            /*ObjectScale = float.Parse(GUI.TextField(new Rect(80,10,30,20),ObjectScale.ToString()));
 			if (GUI.Button(new Rect(120, 10, 80, 20), "Scale"))
             {
 				if (mainObject != null)
 				{
 					networkView.RPC("ScaleModel", RPCMode.All, ObjectScale);
 				}
-			}
+			}*/
+			
             if (serverth.server_status == "online" || Network.peerType == NetworkPeerType.Server)
             {
                 if (currentClickedLocation != Vector3.zero)
@@ -437,7 +445,7 @@ public class Server : MonoBehaviour , IServerThread{
 	void OnPlayerConnected(NetworkPlayer player) {
 		if (serverth.current_server_activity == "server_downloaded")
 		{
-			networkView.RPC("LoadLocalFBX", RPCMode.Others, last__status_content, last_modelUrl,0);
+			networkView.RPC("LoadLocalFBX", RPCMode.Others, host_id, last_modelUrl,0);
 		}
 	}
 
@@ -503,7 +511,14 @@ public class Server : MonoBehaviour , IServerThread{
 	{
         //pfGo = GameObject.Find("PathFinding");
 		pf = this.GetComponent<AstarPath>();
+		//set path finding region to the center of building
+		Vector3 center = HoUtility.GetCenterOfGroup(mainObject);
+		Debug.Log ("Center point: " + center);
+		pf.transform.position = new Vector3(center.x,0F,center.z);
+		ground.transform.position = new Vector3(center.x,-0.1F,center.z);
+		//begin scanning
 		pf.Scan ();
+		
         cusSeeker.Rescan = true;
 	}
 
@@ -514,7 +529,7 @@ public class Server : MonoBehaviour , IServerThread{
 		Ray ray;
         RaycastHit hit;
 		
-        if (voice.enabled == false)
+        if (voice != null && voice.enabled == false)
         {
             if (Network.peerType == NetworkPeerType.Server || Network.peerType == NetworkPeerType.Client)
             {
@@ -532,7 +547,7 @@ public class Server : MonoBehaviour , IServerThread{
                     if (hit.collider.gameObject.layer == 8)
                     {
                         currentClickedLocation = hit.point;
-                        Debug.Log(hit.point);
+                        //Debug.Log(hit.point);
                     }
                 }
             }
@@ -579,7 +594,7 @@ public class Server : MonoBehaviour , IServerThread{
         if (is_loading_model == true)
         {
             //networkView.RPC("DownloadModel", RPCMode.All, host_id, AppConst.SERVER_DOMAIN + AppConst.SERVER_PATH + AppConst.SERVER_MODEL_PATH + host_id + ".fbx");
-            networkView.RPC("LoadLocalFBX", RPCMode.All, status_content, AppConst.SERVER_PATH + AppConst.SERVER_MODEL_PATH + host_id + ".fbx",1);
+            networkView.RPC("LoadLocalFBX", RPCMode.All, host_id, AppConst.SERVER_PATH + AppConst.SERVER_MODEL_PATH + host_id + ".fbx",1);
             is_loading_model = false;
         }
 		
@@ -618,13 +633,13 @@ public class Server : MonoBehaviour , IServerThread{
 	}
 	
     [RPC]
-    public void LoadLocalFBX(string _status_content, string modelUrl, int LoadType)
+    public void LoadLocalFBX(string sid_status, string modelUrl, int LoadType)
     {
 		//Loadtype: 0: first load only, 1:always load 
 		if (LoadType == 0 && mainObject != null)
 			return;
 		
-		last__status_content = _status_content;
+		status_content = wclient.DownloadString(AppConst.SERVER_DOMAIN + AppConst.SERVER_PATH + "?act=GetSemantic&sid=" + sid_status);
 		last_modelUrl = modelUrl;
 		Debug.Log("Download client model:" + modelUrl);
 		if (Network.peerType == NetworkPeerType.Client)
@@ -639,7 +654,7 @@ public class Server : MonoBehaviour , IServerThread{
         	mainObject = ImportModel("building.fbx");
 		else if (Network.peerType == NetworkPeerType.Client)
 			mainObject = ImportModel("building-client.fbx");
-        ScalingObject(_status_content);
+        ScalingObject(status_content);
 		networkView.RPC("ScaleModel", RPCMode.All, ObjectScale);
     }
 	

@@ -24,7 +24,7 @@ class ServerThread
 
             byte[] data = client.UploadValues(AppConst.SERVER_DOMAIN + AppConst.SERVER_PATH + "?act=SetServerAct", pa);
             current_server_activity = HoUtility.ByteToString(data);
-            main.Log("current_server_activity: " + current_server_activity);
+            //main.Log("current_server_activity: " + current_server_activity);
             if (current_server_activity == "client_connected")
             {
                 data = client.UploadValues(AppConst.SERVER_DOMAIN + AppConst.SERVER_PATH + "?act=ClientIP", pa);

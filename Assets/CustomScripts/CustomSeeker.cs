@@ -169,6 +169,12 @@ public class CustomSeeker : MonoBehaviour
                 }
                 networkView.RPC("DrawPath", RPCMode.All, pathPointString);
             }
+			else
+			{
+				//path finding is failed. Removing the last ending point
+				//this will prevent continuously showing error message
+				server.endPathLocation = Vector3.zero;
+			}
         }
 
     }
@@ -282,8 +288,13 @@ public class CustomSeeker : MonoBehaviour
 				//camera.transform.position = BeforeMoving;
             }
         }
-
-        if (server.startPathLocation != Vector3.zero && server.endPathLocation != Vector3.zero || server.multiPathPoint != null && server.multiPathPoint.Count >= 2)
+		
+		
+		//finding for the path
+        if (server.startPathLocation != Vector3.zero && 
+			server.endPathLocation != Vector3.zero || 
+			server.multiPathPoint != null && 
+			server.multiPathPoint.Count >= 2)
         {
             if (total_time > 0.5)
             {
@@ -304,7 +315,7 @@ public class CustomSeeker : MonoBehaviour
                     sk.StartPath(mp);
                 }
                 total_time = 0;
-                if (Rescan)
+                if (Rescan && server.pf != null)
                 {
                     //ClearPrevious();
                     server.pf.Scan();

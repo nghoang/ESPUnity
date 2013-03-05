@@ -18,6 +18,36 @@ public class HoUtility : MonoBehaviour {
         }
         return res;
     }
+	
+	public static Vector3 GetCenterOfGroup(GameObject go)
+	{
+		float minX=float.MaxValue;
+		float minY=float.MaxValue;
+		float minZ=float.MaxValue;
+		float maxX=float.MaxValue*(-1);
+		float maxY=float.MaxValue*(-1);
+		float maxZ=float.MaxValue*(-1);
+		foreach (Transform t in go.transform)
+		{
+			if (t.renderer != null)
+			{
+				if (t.renderer.bounds.center.x < minX)
+					minX = t.renderer.bounds.center.x;
+				if (t.renderer.bounds.center.y < minY)
+					minY = t.renderer.bounds.center.y;
+				if (t.renderer.bounds.center.z < minZ)
+					minZ = t.renderer.bounds.center.z;
+				
+				if (t.renderer.bounds.center.x > maxX)
+					maxX = t.renderer.bounds.center.x;
+				if (t.renderer.bounds.center.y > maxY)
+					maxY = t.renderer.bounds.center.y;
+				if (t.renderer.bounds.center.z > maxZ)
+					maxZ = t.renderer.bounds.center.z;
+			}
+		}
+		return new Vector3((minX + maxX)/2,(minY + maxY)/2,(minZ + maxZ)/2);
+	}
 
     public static string SimpleRegexSingle(string pattern, string content, int group, RegexOptions options)
     {
