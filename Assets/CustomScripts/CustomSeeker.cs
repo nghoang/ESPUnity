@@ -118,8 +118,8 @@ public class CustomSeeker : MonoBehaviour
                     //}
 
                     string pathPointString = "";
-                    Vector3[] vpath = mp.vectorPaths[j];
-                    for (int i = 0; i < vpath.Length; i++)
+                    List<Vector3> vpath = mp.vectorPaths[j];
+                    for (int i = 0; i < vpath.Count; i++)
                     {
                         if (pathPointString == "")
                             pathPointString += vpath[i].x + "," + vpath[i].y + "," + vpath[i].z;
@@ -160,7 +160,7 @@ public class CustomSeeker : MonoBehaviour
                 //}
 
                 string pathPointString = "";
-                for (int i = 0; i < path.vectorPath.Length; i++)
+                for (int i = 0; i < path.vectorPath.Count; i++)
                 {
                     if (pathPointString == "")
                         pathPointString += path.vectorPath[i].x + "," + path.vectorPath[i].y + "," + path.vectorPath[i].z;
@@ -261,7 +261,7 @@ public class CustomSeeker : MonoBehaviour
     {
         if (isLetItMove)
         {
-            if (currentWaypoint < path.vectorPath.Length)
+            if (currentWaypoint < path.vectorPath.Count)
             {
                 Vector3 dir = path.vectorPath[currentWaypoint] - movingObject.transform.position;
 				if (isFirstPerson == true)
@@ -311,7 +311,7 @@ public class CustomSeeker : MonoBehaviour
                     {
                         starts[i - 1] = server.multiPathPoint[i];
                     }
-                    MultiTargetPath mp = new MultiTargetPath(starts, server.multiPathPoint[0], null, onCompleteFunction);
+                    MultiTargetPath mp = MultiTargetPath.Construct (starts, server.multiPathPoint[0], null, onCompleteFunction);//new MultiTargetPath(starts, server.multiPathPoint[0], null, onCompleteFunction);
                     sk.StartPath(mp);
                 }
                 total_time = 0;
